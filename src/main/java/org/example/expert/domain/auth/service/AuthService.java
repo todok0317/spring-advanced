@@ -25,7 +25,7 @@ public class AuthService {
 
     @Transactional
     public SignupResponse signup(SignupRequest signupRequest) {
-        // 레벨 1-1 리팩토링
+        // 레벨 1-1 리팩토링 : 비밀번호를 암호화 하기 전에 먼저 중복 이메일 검사를 수행하는 것이 효율적
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new InvalidRequestException("이미 존재하는 이메일입니다.");
         }
