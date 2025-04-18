@@ -1,11 +1,14 @@
 package org.example.expert.config;
 
 import org.example.expert.domain.auth.exception.AuthException;
+import org.example.expert.domain.auth.exception.ForbiddenException;
+import org.example.expert.domain.auth.exception.UnauthorizedException;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.common.exception.ServerException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -40,5 +43,24 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, status);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public Map<String, String> handleUnauthorizedException(UnauthorizedException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Unauthorized");
+        errorResponse.put("message", e.getMessage());
+        return errorResponse;
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN) // 403
+    public Map<String, String> handleForbiddenException(ForbiddenException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Forbidden");
+        errorResponse.put("message", e.getMessage());
+        return errorResponse;
+    }
+
 }
 
